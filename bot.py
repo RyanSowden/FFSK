@@ -13,6 +13,10 @@ league = () #setting the league variable
 
 client = commands.Bot(command_prefix=';')
 
+@client.event
+async def on_ready():
+    print(f'{client.user} has connected to Discord!')
+
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
@@ -27,9 +31,6 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 
-@client.event
-async def on_ready():
-    print(f'{client.user} has connected to Discord!')
 
 #@client.command(name='assign', help='This lests the admin user assign the league ID from sleeper to a key word e.g Green')
 #async def assign_key_value(ctx,*args):
