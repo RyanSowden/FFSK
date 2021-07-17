@@ -4,9 +4,10 @@ from sleeper_wrapper import League
 from sleeper_wrapper import Players
 import pandas as pd
 from tabulate import tabulate
+from db_connect import connection
+import re
 
-
-
+c = connection.cursor()
 
 #bot command to get the standings for the requested league, will work for any sleeper league as logn as you have the league ID.
 
@@ -18,7 +19,10 @@ class Standings(commands.Cog):
 
     @commands.command(name='standings', help='This gets standings for the requested league')
     async def get_standings(self,ctx,arg):
-        self.league = League(arg)
+        c.execute("SELECT league_number FROM league WHERE league_name = %s;",(arg,))
+        rows = c.fetchall()
+        self.results = str(re.sub(r'[]),[(]', '', str(rows)))
+        self.league = League(self.results)
         self.league_name = self.league.get_league()
         self.rosters = self.league.get_rosters()
         self.users = self.league.get_users()
