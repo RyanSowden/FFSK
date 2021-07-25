@@ -1,7 +1,6 @@
 import discord 
 from discord.ext import commands
 from sleeper_wrapper import League
-from sleeper_wrapper import Players
 import pandas as pd
 from tabulate import tabulate
 from db_connect import connection
@@ -21,7 +20,7 @@ class Standings(commands.Cog):
     async def get_standings(self,ctx,arg):
         c.execute("SELECT league_number FROM league WHERE league_name = %s;",(arg,))
         rows = c.fetchall()
-        self.results = str(re.sub(r'[]),[(]', '', str(rows)))
+        self.results = str(re.sub(r'[]),[(]', '', str(rows))) #stripping results of query so it can be passed to the table
         self.league = League(self.results)
         self.league_name = self.league.get_league()
         self.rosters = self.league.get_rosters()
@@ -32,12 +31,12 @@ class Standings(commands.Cog):
         self.results = (self.df[self.df.columns[[0,1,2]]])
         self.results['W/L']=self.results[1] + '-'+ self.results[2]
         self.table_data = self.results.drop([1,2], axis=1)
-        self.table = "```" + tabulate(self.table_data, headers=['Name','W/L'], showindex=False, tablefmt='plain') + "```"    
-        self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Standings', description=self.table, colour=5793266)
+        self.table = "```" + tabulate(self.table_data, headers=['Name','W/L'], showindex=False, tablefmt='plain') + "```" #formatting the table   
+        self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Standings', description=self.table, colour=5793266) #setting up the table to be embeded
         await ctx.send(embed=self.embed)
 
-def setup(client):
-    client.add_cog(Standings(client))
 
+def setup(client):#setting up the disocrd client, must have this for COGS to work!
+    client.add_cog(Standings(client))
 
 

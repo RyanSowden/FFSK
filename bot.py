@@ -17,6 +17,8 @@ client = commands.Bot(command_prefix=';')
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
+
+
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
@@ -31,14 +33,6 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 
-
-#@client.command(name='assign', help='This lests the admin user assign the league ID from sleeper to a key word e.g Green')
-#async def assign_key_value(ctx,*args):
- #   league_number = args
-#   league_name = args
- #   new_league_name = league_name(args)
-  #  await ctx.send(new_leauge_name)
-
 #error handling & logging for easy tracking, *writes to err.log
 @client.event
 async def on_error(event, *args, **kwargs):
@@ -48,6 +42,13 @@ async def on_error(event, *args, **kwargs):
         else:
             raise
 
-client.run(TOKEN)
+#@client.command(name='assign', help='This lests the admin user assign the league ID from sleeper to a key word e.g Green')
+#async def assign_key_value(ctx,*args):
+ #   league_number = args
+#   league_name = args
+ #   new_league_name = league_name(args)
+  #  await ctx.send(new_leauge_name)
 
+
+client.run(TOKEN)
 
