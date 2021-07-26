@@ -17,7 +17,28 @@ client = commands.Bot(command_prefix=';')
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
+#Error hadnling....
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+        await ctx.send("Sorry, that command wasn't found, enter ;help for a list of commands.")
+    elif isinstance(error, discord.ext.commands.MissingRequiredArgument):
+        await ctx.send("Please provied the required amount of arguments.")
+    elif isinstance(error, discord.ext.commands.CommandInvokeError):
+        await ctx.send("Too many arguments, please enter the required amount of arguments.")
+    elif isinstance(error, discord.ext.commands.MissingRole):
+        await ctx.send("You don't have the sufficient role to perform this action")
+    else:
+        raise error
 
+#error handling logging, *writes to err.log
+@client.event
+async def on_error(event, *args, **kwargs):
+    with open('err.log', 'a') as f:
+        if event == 'on_message':
+            f.write(f'Unhandled message: {args[0]}\n')
+        else:
+            raise
 
 @client.command()
 async def load(ctx, extension):
@@ -31,23 +52,6 @@ async def unload(ctx, extension):
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
-
-
-#error handling & logging for easy tracking, *writes to err.log
-@client.event
-async def on_error(event, *args, **kwargs):
-    with open('err.log', 'a') as f:
-        if event == 'on_message':
-            f.write(f'Unhandled message: {args[0]}\n')
-        else:
-            raise
-
-#@client.command(name='assign', help='This lests the admin user assign the league ID from sleeper to a key word e.g Green')
-#async def assign_key_value(ctx,*args):
- #   league_number = args
-#   league_name = args
- #   new_league_name = league_name(args)
-  #  await ctx.send(new_leauge_name)
 
 
 client.run(TOKEN)

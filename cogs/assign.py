@@ -15,7 +15,7 @@ class Assign(commands.Cog):
     def __init___(self,client):
         self.client = client
 
-    @commands.command(name='assign', help='Command to assign league name to league ID')
+    @commands.command(name='assign', help='Assign league name to league ID')
     @commands.has_role("Admin")#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
     async def assign_league(self,ctx,arg1,arg2):
         self.league_number = arg1
