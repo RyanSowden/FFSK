@@ -24,8 +24,6 @@ async def on_command_error(ctx, error):
         await ctx.send("Sorry, that command wasn't found, enter ;help for a list of commands.")
     elif isinstance(error, discord.ext.commands.MissingRequiredArgument):
         await ctx.send("Please provied the required amount of arguments.")
-    elif isinstance(error, discord.ext.commands.CommandInvokeError):
-        await ctx.send("Too many arguments, please enter the required amount of arguments.")
     elif isinstance(error, discord.ext.commands.MissingRole):
         await ctx.send("You don't have the sufficient role to perform this action")
     else:

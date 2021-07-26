@@ -20,8 +20,8 @@ class Standings(commands.Cog):
     async def get_standings(self,ctx,arg):
         c.execute("SELECT league_number FROM league WHERE league_name = %s;",(arg,))
         rows = c.fetchall()
-        if len(rows) == 0:
-            await ctx.send('League not found.')
+        if len(rows) == 0: #if none found, return error
+            await ctx.send('No league found.')
         else:
             self.results = str(re.sub(r'[]),[(]', '', str(rows))) #stripping results of query so it can be passed to the table
             self.league = League(self.results)
