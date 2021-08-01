@@ -29,11 +29,10 @@ class Standings(commands.Cog):
             self.rosters = self.league.get_rosters()
             self.users = self.league.get_users()
             self.standings = self.league.get_standings(self.rosters,self.users)
-            self.df = pd.DataFrame.from_dict(self.standings)
-            self.df.index = self.df.index + 1
-            self.results = (self.df[self.df.columns[[0,1,2]]])
-            self.results['W/L']=self.results[1] + '-'+ self.results[2]
-            self.table_data = self.results.drop([1,2], axis=1)
+            self.df = pd.DataFrame.from_dict(self.standings) #returning the standings as a dataframe
+            self.results = (self.df[self.df.columns[[0,1,2]]])#closing which columns to return
+            self.results['W/L']=self.results[1] + '-'+ self.results[2]#adding the 'W/L' ratio
+            self.table_data = self.results.drop([1,2], axis=1) #dropping the 2 W/L columns as they are no longer needed
             self.table = "```" + tabulate(self.table_data, headers=['Name','W/L'], showindex=False, tablefmt='plain') + "```" #formatting the table   
             self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Standings', description=self.table, colour=5793266) #setting up the table to be embeded
             await ctx.send(embed=self.embed)
