@@ -33,7 +33,7 @@ class Matchups(commands.Cog):
             self.df = pd.DataFrame.from_dict(self.scoreboards)
             self.df[self.df.columns[[0,1,2,3]]]
             self.transpose_df = self.df.transpose()
-            self.table_data = "```" + tabulate(self.transpose_df, headers=['Team 1','Team 2'], showindex=False, tablefmt='plain') + "```"
+            self.table_data = tabulate(self.transpose_df, headers=['Team 1','Team 2'], showindex=False, tablefmt='plain')
             self.table = str(re.sub(r"[),[('']", '', str(self.table_data)))
             self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Week' + ' ' + self.week + ' ' +  'Matchup', description=self.table, colour=5793266) #setting up the table to be embeded
 
