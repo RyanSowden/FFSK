@@ -59,7 +59,7 @@ class Lineups(commands.Cog):
             self.t11 = self.result.loc[10,1]
             self.t12 = self.result.loc[11,1]
 
-            c.execute("SELECT * FROM players WHERE player_id = ANY (%s)",(self.t2,))
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t2,))
             self.rows = c.fetchall()
             await ctx.send(self.rows)
 def setup(client):#setting up the disocrd client, must have this for COGS to work!
