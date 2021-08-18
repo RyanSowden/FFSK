@@ -59,8 +59,31 @@ class Lineups(commands.Cog):
             self.t11 = self.result.loc[10,1]
             self.t12 = self.result.loc[11,1]
 
+            '''Queries to get the  lineups from the database.'''
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t1,))
+            self.t1_row = c.fetchall()
             c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t2,))
-            self.rows = c.fetchall()
-            await ctx.send(self.rows)
+            self.t2_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t3,))
+            self.t3_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t4,))
+            self.t4_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t5,))
+            self.t5_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t6,))
+            self.t6_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t7,))
+            self.t7_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t8,))
+            self.t8_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t9,))
+            self.t9_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t10,))
+            self.t10_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t11,))
+            self.t11_row = c.fetchall()
+            c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t12,))
+            self.t12_row = c.fetchall()
+            await ctx.send(self.t2_row)
 def setup(client):#setting up the disocrd client, must have this for COGS to work!
     client.add_cog(Lineups(client))
