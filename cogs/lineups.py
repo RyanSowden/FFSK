@@ -84,6 +84,63 @@ class Lineups(commands.Cog):
             self.t11_row = c.fetchall()
             c.execute("SELECT full_name,position,team FROM players WHERE player_id = ANY (%s)",(self.t12,))
             self.t12_row = c.fetchall()
-            await ctx.send(self.t2_row)
+            #taking results from database and putting them in a dictionary.
+            self.team_rows = [self.t1_row,
+                    self.t2_row,
+                    self.t3_row,
+                    self.t4_row,
+                    self.t5_row,
+                    self.t6_row,
+                    self.t7_row,
+                    self.t8_row,
+                    self.t9_row,
+                    self.t10_row,
+                    self.t11_row,
+                    self.t12_row]
+            #Putting dictionary into dataframe
+            self.df_team = pd.DataFrame.from_dict(self.team_rows)
+            #Transposing the table for better table management
+            self.team_results = self.df_team.transpose()
+            #preparing the table data for the table
+            self.table_data1 = "```" +  tabulate(self.team_results[0], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data2 = "```" +  tabulate(self.team_results[1], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data3 = "```" +  tabulate(self.team_results[2], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data4 = "```" +  tabulate(self.team_results[3], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data5 = "```" +  tabulate(self.team_results[4], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data6 = "```" +  tabulate(self.team_results[5], headers=[], showindex=False, tablefmt='plain')+ "```"
+            #self.table_data7 = "```" +  tabulate(self.team_results[6], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data8 = "```" +  tabulate(self.team_results[7], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data9 = "```" +  tabulate(self.team_results[8], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data10 = "```" +  tabulate(self.team_results[9], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data11 = "```" +  tabulate(self.team_results[10], headers=[], showindex=False, tablefmt='plain')+ "```"
+            self.table_data12 = "```" +  tabulate(self.team_results[11], headers=[], showindex=False, tablefmt='plain')+ "```"
+            #Stripping the data of non essiental characters 
+            self.table1 = str(re.sub(r"[),[('']", '', str(self.table_data1)))
+            self.table2 = str(re.sub(r"[),[('']", '', str(self.table_data2)))
+            self.table3 = str(re.sub(r"[),[('']", '', str(self.table_data3)))
+            self.table4 = str(re.sub(r"[),[('']", '', str(self.table_data4)))
+            self.table5 = str(re.sub(r"[),[('']", '', str(self.table_data5)))
+            self.table6 = str(re.sub(r"[),[('']", '', str(self.table_data6)))
+            #self.table7 = str(re.sub(r"[),[('']", '', str(self.table_data7)))
+            self.table8 = str(re.sub(r"[),[('']", '', str(self.table_data8)))
+            self.table9 = str(re.sub(r"[),[('']", '', str(self.table_data9)))
+            self.table10 = str(re.sub(r"[),[('']", '', str(self.table_data10)))
+            self.table11 = str(re.sub(r"[),[('']", '', str(self.table_data11)))
+            self.table12 = str(re.sub(r"[),[('']", '', str(self.table_data12)))
+            #preparing the embed to be sent.
+            self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Lineups' + ' ' + 'Week' + ' ' + self.week, colour=5793266)
+            self.embed.add_field(name='1', value=self.table1, inline=False)
+            self.embed.add_field(name='2', value=self.table2, inline=False)
+            self.embed.add_field(name='3', value=self.table3, inline=False)
+            self.embed.add_field(name='4', value=self.table4, inline=False)
+            self.embed.add_field(name='5', value=self.table5, inline=False)
+            self.embed.add_field(name='6', value=self.table6, inline=False)
+            #self.embed.add_field(name='7', value=self.table7, inline=false)
+            self.embed.add_field(name='8', value=self.table8, inline=False)
+            self.embed.add_field(name='9', value=self.table9, inline=False)
+            self.embed.add_field(name='10', value=self.table10, inline=False)
+            self.embed.add_field(name='11', value=self.table11, inline=False)
+            self.embed.add_field(name='12', value=self.table12, inline=False)
+            await ctx.send(embed=self.embed)
 def setup(client):#setting up the disocrd client, must have this for COGS to work!
     client.add_cog(Lineups(client))
