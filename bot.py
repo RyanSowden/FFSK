@@ -11,7 +11,7 @@ load_dotenv() #loading the .env file
 TOKEN = os.getenv('DISCORD_TOKEN') #fetches the discord token from .env file
 league = () #setting the league variable
 
-client = commands.Bot(command_prefix=';')
+client = commands.Bot(command_prefix=';', help_command=None)
 
 @client.event
 async def on_ready():
