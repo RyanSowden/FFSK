@@ -6,6 +6,7 @@ attrs==21.2.0
 certifi==2021.5.30
 chardet==3.0.4
 discord.py==1.7.3
+greenlet==1.1.1
 idna==2.8
 importlib-metadata==4.6.1
 iniconfig==1.1.1
@@ -25,7 +26,8 @@ python-dotenv==0.18.0
 pytz==2021.1
 requests==2.22.0
 six==1.16.0
-sleeper-api-wrapper==1.0.8
+sleeper-api-wrapper==1.0.9
+SQLAlchemy==1.4.23
 tabulate==0.8.9
 toml==0.10.2
 typing-extensions==3.10.0.0
