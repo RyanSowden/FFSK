@@ -19,7 +19,7 @@ The default set of modules includes and is not limited to:
 * Getting all the starting lineups for your league.
 
 # Installation
-FSK curently is only supported on unix platforms(OSX and linx), to install please refer to the wiki linked below:
+FSK currently is only supported on unix platforms,to install please refer to the wiki linked below:
 
 * [FSK Wiki](https://github.com/RyanSowden/fsk/wiki)
 
