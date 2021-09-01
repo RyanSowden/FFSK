@@ -10,6 +10,8 @@ try:
 
     c = connection.cursor()
 
+    print('Successfully connected to PostgreSQL')
+
 except (Exception, psycopg2.Error) as error:
     print('Error while connectiong to PostgreSQL', error)
 
