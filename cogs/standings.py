@@ -23,7 +23,7 @@ class Standings(commands.Cog):
         if len(rows) == 0: #if none found, return error
             await ctx.send('No league found.')
         else:
-            self.results = str(re.sub(r'[]),[(]', '', str(rows))) #stripping results of query so it can be passed to the table
+            self.results = str(re.sub(r"[]),[('']", '', str(rows))) #stripping results of query so it can be passed to the table
             self.league = League(self.results)
             self.league_name = self.league.get_league()
             self.rosters = self.league.get_rosters()
