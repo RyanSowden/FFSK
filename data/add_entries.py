@@ -8,11 +8,11 @@ engine = create_engine('postgresql+psycopg2://{user}:{pw}@localhost/{db}'
             pw='test',
             db='ffsk'))
 
-stats = pd.read_csv('Sleeper_Player_Names_V2.csv')
+stats = pd.read_csv('player_names.csv')
 
 df  = stats[['player_id','full_name','position','team']]
 
-df.to_sql('players',con=engine, if_exists = 'append', index=False)
+df.to_sql('players',con=engine, if_exists = 'replace', index=False)
 
 print("Successfully added players to the database")
 
