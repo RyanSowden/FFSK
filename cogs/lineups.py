@@ -128,7 +128,7 @@ class Lineups(commands.Cog):
             self.table11 = str(re.sub(r"[),[('']", '', str(self.table_data11)))
             self.table12 = str(re.sub(r"[),[('']", '', str(self.table_data12)))
             #preparing the embed to be sent.
-            self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Lineups' + ' ' + 'Week' + ' ' + self.week, colour=5793266)
+            self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Lineups' + ' ' + 'Week' + ' ' + self.week, colour=5763719)
             self.embed.add_field(name=self.p1, value=self.table1, inline=False)
             self.embed.add_field(name=self.p2, value=self.table2, inline=False)
             self.embed.add_field(name=self.p3, value=self.table3, inline=False)

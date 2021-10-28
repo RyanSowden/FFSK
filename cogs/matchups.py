@@ -50,7 +50,7 @@ class Matchups(commands.Cog):
             self.table5 = str(re.sub(r"[),[('']", '', str(self.table_data5)))
             self.table6 = str(re.sub(r"[),[('']", '', str(self.table_data6)))
             #self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Week' + ' ' + self.week + ' ' +  'Matchup', description=self.table, colour=5793266) #setting up the table to be embeded
-            self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week, colour=5793266)
+            self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week, colour=15548997)
             self.embed.add_field(name='1', value=self.table1, inline=False)
             self.embed.add_field(name='2', value=self.table2, inline=False)
             self.embed.add_field(name='3', value=self.table3, inline=False)
