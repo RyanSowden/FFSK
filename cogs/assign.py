@@ -19,17 +19,22 @@ class Assign(commands.Cog):
     async def assign_league(self,ctx,arg1,arg2):
         self.league_number = arg1
         self.league_name = arg2
+        
+        try:
+            c.execute("SELECT * FROM league WHERE league_name = %s;",(self.league_name,))
+            rows = c.fetchall()
 
-        c.execute("SELECT * FROM league WHERE league_name = %s;",(self.league_name,))
-        rows = c.fetchall()
+            if len(rows) == 0:
+                c.execute("INSERT INTO league (league_name,league_number) VALUES(%s,%s)",(self.league_name,self.league_number,))
+                connection.commit()
+                await ctx.send('League successfully assigned.')
 
-        if len(rows) == 0:
-            c.execute("INSERT INTO league (league_name,league_number) VALUES(%s,%s)",(self.league_name,self.league_number,))
-            connection.commit()
-            await ctx.send('League successfully assigned.')
+            else:
+                await ctx.send('League name or number already exists, please try again with a different combination.')
 
-        else:
-            await ctx.send('League name or number already exists, please try again with a different combination.')
+        except Exception:
+                connection.rollback()
+                await ctx.send('Whoops, something went wrong')
 
 def setup(client): #setting up the disocrd client, must have this for COGS to work
     client.add_cog(Assign(client))
