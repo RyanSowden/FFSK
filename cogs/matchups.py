@@ -1,31 +1,35 @@
 import discord 
+import os
 from discord.ext import commands
+from discord import app_commands
 from sleeper_wrapper import League
 import pandas as pd
 from tabulate import tabulate
 from db_connect import connection
 import re
+
+GUILD = os.getenv('GUILD_ID')
 c = connection.cursor()
 
 
 
 class Matchups(commands.Cog):
 
-    def __init__(self,client):
-        self.client = client
+    def __init__(self,bot:commands.Bot) -> None:
+        self.bot = bot
 
 
-    @commands.command(name='matchups', help='Get matchups and scores for the requested league')
-    async def get_matchups(self,ctx,arg1,arg2):
+    @app_commands.command(name='matchups')
+    async def get_matchups(self,interaction: discord.Interaction, league: str, week:str) -> None:
         try:
-            c.execute("SELECT league_number FROM league WHERE league_name = %s;",(arg1,))
+            c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()
             if len(rows) == 0: #if none found, return error
-                await ctx.send('No league found.')
+                await interaction.response.send_message('No league found.')
             else:
                 self.results = str(re.sub(r"[]),[('']", '', str(rows))) #stripping results of query so it can be passed to the table
                 self.league = League(self.results)
-                self.week = arg2
+                self.week = week
                 self.league_name = self.league.get_league()
                 self.rosters = self.league.get_rosters()
                 self.users = self.league.get_users()
@@ -34,7 +38,7 @@ class Matchups(commands.Cog):
                 self.df = pd.DataFrame.from_dict(self.scoreboards)
                 self.df[self.df.columns[[0,1,2,3]]]
                 self.transpose_df = self.df.transpose()
-
+                
                 '''
                  To make sure the matchups display correctly inside discord, each table result needs to be returned as an individual result and made into a seperate table
                  '''
@@ -50,7 +54,6 @@ class Matchups(commands.Cog):
                 self.table4 = str(re.sub(r"[),[('']", '', str(self.table_data4)))
                 self.table5 = str(re.sub(r"[),[('']", '', str(self.table_data5)))
                 self.table6 = str(re.sub(r"[),[('']", '', str(self.table_data6)))
-            #self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Week' + ' ' + self.week + ' ' +  'Matchup', description=self.table, colour=5793266) #setting up the table to be embeded
                 self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week, colour=15548997)
                 self.embed.add_field(name='1', value=self.table1, inline=False)
                 self.embed.add_field(name='2', value=self.table2, inline=False)
@@ -58,12 +61,13 @@ class Matchups(commands.Cog):
                 self.embed.add_field(name='4', value=self.table4, inline=False)
                 self.embed.add_field(name='5', value=self.table5, inline=False)
                 self.embed.add_field(name='6', value=self.table6, inline=False)
+                await interaction.response.defer()
+                await interaction.followup.send(embed=self.embed)
 
-            await ctx.send(embed=self.embed)
-
-        except Exception:
+        except Exception as e:
             connection.rollback()
-            await ctx.send('Whoops, something went wrong')
+            print(e)
+            await interaction.response.send_message("Whoops, something went wrong")
 
-def setup(client):#setting up the disocrd client, must have this for COGS to work!
-    client.add_cog(Matchups(client))
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Matchups(bot), guilds=[discord.Object(id=GUILD)])

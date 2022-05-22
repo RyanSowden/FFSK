@@ -1,31 +1,34 @@
 import discord 
+import os
 from discord.ext import commands
+from discord import app_commands
 from sleeper_wrapper import League
 import pandas as pd
 from tabulate import tabulate
 from db_connect import connection
 import re
 
+GUILD = os.getenv('GUILD_ID')
 c = connection.cursor()
 
 #bot command to get the starting lineups for all palers in the requested league.
 class Lineups(commands.Cog):
 
-    def __init__(self,client):
-        self.client = client
+    def __init__(self, bot:commands.Bot) -> None:
+        self.bot = bot
 
 
-    @commands.command(name='lineups', help='Get starting lineups for the requested league')
-    async def get_lineups(self,ctx,arg1,arg2):
+    @app_commands.command(name='lineups')
+    async def get_lineups(self,interaction: discord.Interaction,league: str, week: str) -> None:
         try:
-            c.execute("SELECT league_number FROM league WHERE league_name = %s;",(arg1,))
+            c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()
             if len(rows) == 0: #if none found, return error
-                await ctx.send('No league found.')
+                await interaction.response.send_message('No league found.')
             else:
                 self.results = str(re.sub(r"[]),[('']", '', str(rows))) #stripping results of query so it can be passed to the table
                 self.league = League(self.results)
-                self.week = arg2
+                self.week = week
                 self.league_name = self.league.get_league()
                 self.rosters = self.league.get_rosters()
                 self.users = self.league.get_users()
@@ -142,10 +145,11 @@ class Lineups(commands.Cog):
                 self.embed.add_field(name=self.p10, value=self.table10, inline=False)
                 self.embed.add_field(name=self.p11, value=self.table11, inline=False)
                 self.embed.add_field(name=self.p12, value=self.table12, inline=False)
-                await ctx.send(embed=self.embed)
+                await interaction.response.defer()
+                await interaction.followup.send(embed=self.embed)
 
         except Exception:
             connection.rollback()
-            await ctx.send('Whoops something went wrong')
-def setup(client):#setting up the disocrd client, must have this for COGS to work!
-    client.add_cog(Lineups(client))
+            await interaction.response.send_message('Whoops something went wrong')
+async def setup(bot: commands.Bot) -> None:
+  await bot.add_cog(Lineups(bot), guilds=[discord.Object(id=GUILD)])
