@@ -21,6 +21,7 @@ class Matchups(commands.Cog):
 
     @app_commands.command(name='matchups')
     async def get_matchups(self,interaction: discord.Interaction, league: str, week:str) -> None:
+        """League matchups and points"""
         try:
             c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()

@@ -21,6 +21,7 @@ class Standings(commands.Cog):
 
     @app_commands.command(name='standings')
     async def get_standings(self, interaction: discord.Interaction, league: str):
+        """League standings"""
         try:
             c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()

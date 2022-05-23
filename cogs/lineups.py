@@ -20,6 +20,7 @@ class Lineups(commands.Cog):
 
     @app_commands.command(name='lineups')
     async def get_lineups(self,interaction: discord.Interaction,league: str, week: str) -> None:
+        """League starting lineups"""
         try:
             c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()
