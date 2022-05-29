@@ -3,15 +3,14 @@ from discord.ext import commands
 from discord import app_commands
 import os
 from db_connect import connection
-import re
             
 c = connection.cursor()
 GUILD = os.getenv('GUILD_ID')
 #function that allows user to assign leagues to names of their choice
 class Assign(commands.Cog):
 
-    def __init___(self,client):
-        self.client = client
+    def __init___(self,bot:commands.Bot) -> None:
+        self.bot = bot
 
     @app_commands.command(name='assign')
     @commands.has_role("Admin")#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
