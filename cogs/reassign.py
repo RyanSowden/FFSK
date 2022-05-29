@@ -13,7 +13,7 @@ class Reassign(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name='reassign')
-    @commands.has_role('Admin')#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
+    @app_commands.checks.has_role('Admin')#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
     async def reassign_league(self, interaction: discord.Interaction, league:str, number:str) -> None:
         """Reassign league name to different ID"""
         self.league_number = number
@@ -26,7 +26,7 @@ class Reassign(commands.Cog):
             c.execute("UPDATE league SET league_name= %s, league_number= %s WHERE league_name= %s",(self.league_name,self.league_number,self.league_name,))
             connection.commit()
             await interaction.response.send_message('League successfully reassigned.')
-
+        
         else:
             await interaction.response.send_message('League name or number does not  exist, please try again with a different combination.')
 

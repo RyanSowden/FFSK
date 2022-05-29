@@ -13,8 +13,9 @@ class Assign(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name='assign')
-    @commands.has_role("Admin")#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
+    @app_commands.checks.has_role('Admin')#Ensuring the approiate role is met, will be diffeerent for each server... must ensure user has the role to be able to use the below function
     async def assign_league(self, interaction: discord.Interaction,league: str, number:str) -> None:
+
         """Assign league name to league ID"""
         self.league_number = number
         self.league_name = league
