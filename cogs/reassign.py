@@ -25,10 +25,12 @@ class Reassign(commands.Cog):
         if len(rows) != 0:
             c.execute("UPDATE league SET league_name= %s, league_number= %s WHERE league_name= %s",(self.league_name,self.league_number,self.league_name,))
             connection.commit()
-            await interaction.response.send_message('League successfully reassigned.')
+            return await interaction.response.send_message('League successfully reassigned.')
         
         else:
             await interaction.response.send_message('League name or number does not  exist, please try again with a different combination.')
+
+    
 
 async def setup(bot: commands.Bot) -> None:
   await bot.add_cog(Reassign(bot), guilds=[discord.Object(id=GUILD)])

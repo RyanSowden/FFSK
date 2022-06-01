@@ -33,6 +33,7 @@ class Bot(commands.Bot):
                     print(e)
                 self.loop.create_task(self.startup())
 
-bot = Bot()                        
-bot.run(TOKEN)
+bot = Bot()   
+if __name__ == "__main__":                     
+    bot.run(TOKEN)
 
