@@ -153,5 +153,6 @@ class Lineups(commands.Cog):
         except Exception:
             connection.rollback()
             await interaction.response.send_message('Whoops something went wrong')
+
 async def setup(bot: commands.Bot) -> None:
   await bot.add_cog(Lineups(bot), guilds=[discord.Object(id=GUILD)])
