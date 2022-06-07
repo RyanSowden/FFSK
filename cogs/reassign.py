@@ -29,7 +29,7 @@ class Reassign(commands.Cog):
             return await interaction.response.send_message('League successfully reassigned.')
         
         else:
-            await interaction.response.send_message('League name or number does not  exist, please try again with a different combination.')
+            return await interaction.response.send_message('League name or number does not  exist, please try again with a different combination.')
 
     
 

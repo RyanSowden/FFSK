@@ -27,14 +27,14 @@ class Assign(commands.Cog):
             if len(rows) == 0:
                 c.execute("INSERT INTO league (league_name,league_number) VALUES(%s,%s)",(self.league_name,self.league_number,))
                 connection.commit()
-                await interaction.response.send_message('League successfully assigned.')
+                return await interaction.response.send_message('League successfully assigned.')
 
             else:
-                await interaction.response.send_message('League name or number already exists, please try again with a different combination.')
+                return await interaction.response.send_message('League name or number already exists, please try again with a different combination.')
 
         except Exception:
                 connection.rollback()
-                await interaction.response.send_message('Whoops, something went wrong')
+                return await interaction.response.send_message('Whoops, something went wrong')
 
 async def setup(bot: commands.Bot) -> None:
   await bot.add_cog(Assign(bot), guilds=[discord.Object(id=GUILD)])
