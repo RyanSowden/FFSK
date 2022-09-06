@@ -23,10 +23,6 @@ FSK currently is only supported on unix platforms,to install please refer to the
 
 * [FSK Wiki](https://github.com/RyanSowden/fsk/wiki)
 
-# Slash Commands
-FSK now supports a beta version of slash commands, if you want to try it out please download from the 'dev' branch.
-Please note this is in dev mode only until a supported version of discord.py 2.0 is released so it may not work all the time.
-
 # Contributing
 FSK is 100% open source and always looking at ways to become better, so if you have any ideas on ways to improve/add to the bot, create a pull request stating what you have changed/added.
 
