@@ -36,37 +36,51 @@ class Matchups(commands.Cog):
                 self.users = self.league.get_users()
                 self.matchups = self.league.get_matchups(self.week)
                 self.scoreboards = self.league.get_scoreboards(self.rosters,self.matchups,self.users,self.week)
-                self.df = pd.DataFrame.from_dict(self.scoreboards)
-                self.df[self.df.columns[[0,1,2,3]]]
-                self.transpose_df = self.df.transpose()
-                '''
-                 To make sure the matchups display correctly inside discord, each table result needs to be returned as an individual result and made into a seperate table
-                 '''
-                self.table_data1 = "```" +  tabulate(self.df[1], headers=[], showindex=False, tablefmt='plain')+ "```"
-                self.table_data2 = "```" +  tabulate(self.df[2], headers=[], showindex=False, tablefmt='plain')+ "```"
-                self.table_data3 = "```" +  tabulate(self.df[3], headers=[], showindex=False, tablefmt='plain')+ "```"
-                self.table_data4 = "```" +  tabulate(self.df[4], headers=[], showindex=False, tablefmt='plain')+ "```"
-                self.table_data5 = "```" +  tabulate(self.df[5], headers=[], showindex=False, tablefmt='plain')+ "```"
-                self.table_data6 = "```" +  tabulate(self.df[6], headers=[], showindex=False, tablefmt='plain')+ "```"
-            
-                self.table1 = str(re.sub(r"[),[('']", '', str(self.table_data1)))
-                self.table2 = str(re.sub(r"[),[('']", '', str(self.table_data2)))
-                self.table3 = str(re.sub(r"[),[('']", '', str(self.table_data3)))
-                self.table4 = str(re.sub(r"[),[('']", '', str(self.table_data4)))
-                self.table5 = str(re.sub(r"[),[('']", '', str(self.table_data5)))
-                self.table6 = str(re.sub(r"[),[('']", '', str(self.table_data6)))
-                
-                self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week,colour=15548997)
-            
-                self.embed.add_field(name='1', value=self.table1, inline=False)
-                self.embed.add_field(name='2', value=self.table2, inline=False)
-                self.embed.add_field(name='3', value=self.table3, inline=False)
-                self.embed.add_field(name='4', value=self.table4, inline=False)
-                self.embed.add_field(name='5', value=self.table5, inline=False)
-                self.embed.add_field(name='6', value=self.table6, inline=False)
-                await interaction.response.defer()
-                await interaction.followup.send(embed=self.embed)
+                if len(self.scoreboards) == 6: #Chekcing length of scoreboards, used to calcualte bye weeks.
+                    self.df = pd.DataFrame.from_dict(self.scoreboards)
+                    self.df[self.df.columns[[0,1,2,3]]]
+                    self.transpose_df = self.df.transpose()
 
+                
+                    self.table_data1 = "```" +  tabulate(self.df[1], headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.table_data2 = "```" +  tabulate(self.df[2], headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.table_data3 = "```" +  tabulate(self.df[3], headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.table_data4 = "```" +  tabulate(self.df[4], headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.table_data5 = "```" +  tabulate(self.df[5], headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.table_data6 = "```" +  tabulate(self.df[6], headers=[], showindex=False, tablefmt='plain')+ "```"
+            
+                    self.table1 = str(re.sub(r"[),[('']", '', str(self.table_data1)))
+                    self.table2 = str(re.sub(r"[),[('']", '', str(self.table_data2)))
+                    self.table3 = str(re.sub(r"[),[('']", '', str(self.table_data3)))
+                    self.table4 = str(re.sub(r"[),[('']", '', str(self.table_data4)))
+                    self.table5 = str(re.sub(r"[),[('']", '', str(self.table_data5)))
+                    self.table6 = str(re.sub(r"[),[('']", '', str(self.table_data6)))
+                
+                    self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week,colour=15548997)
+            
+                    self.embed.add_field(name='1', value=self.table1, inline=False)
+                    self.embed.add_field(name='2', value=self.table2, inline=False)
+                    self.embed.add_field(name='3', value=self.table3, inline=False)
+                    self.embed.add_field(name='4', value=self.table4, inline=False)
+                    self.embed.add_field(name='5', value=self.table5, inline=False)
+                    self.embed.add_field(name='6', value=self.table6, inline=False)
+                    await interaction.response.defer()
+                    await interaction.followup.send(embed=self.embed)
+
+                else:
+
+                    self.playoff_df = pd.DataFrame.from_dict(self.scoreboards, orient='index')
+                    self.newplayoff_df = self.playoff_df.drop(self.playoff_df.columns[[2,3]], axis=1)
+                    
+                    self.playoff_table_data1 = "```" +  tabulate(self.playoff_df, headers=[], showindex=False, tablefmt='plain')+ "```"
+                    self.playoff_table1 = str(re.sub(r"[),[('']", '', str(self.playoff_table_data1)))
+                
+                    self.embed = discord.Embed(title=self.league_name['name'] + ' ' + 'Matchups' + ' ' + 'Week' + ' ' + self.week,colour=15548997)
+                    self.embed.add_field(name='Playoffs', value=self.playoff_table1, inline=False)
+
+                    await interaction.response.defer()
+                    await interaction.followup.send(embed=self.embed)
+       
         except Exception as e:
             connection.rollback()
             print(e)
