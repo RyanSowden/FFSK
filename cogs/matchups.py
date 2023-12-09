@@ -26,7 +26,7 @@ class Matchups(commands.Cog):
         try:
             c.execute("SELECT league_number FROM league WHERE league_name = %s;",(league,))
             rows = c.fetchall()
-            if len(rows) == 0: #if none found, return error
+            if not rows: #if none found, return error
                 await interaction.response.send_message('No league found.')
             else:
                 self.results = str(re.sub(r"[]),[('']", '', str(rows))) #stripping results of query so it can be passed to the table
@@ -40,25 +40,29 @@ class Matchups(commands.Cog):
                 self.df = pd.DataFrame.from_dict(self.scoreboards)
                 # Get the number of columns dynamically
                 num_columns = len(self.df.columns)
+                if num_columns == 0:
+                    await interaction.response.send_message('No fields found in the table.')
 
-                self.embed = discord.Embed()
-                # Create a list to store table data
-                table_data_list = []
+                else:
+                    self.embed = discord.Embed()
+                    # Create a list to store table data
+                    table_data_list = []
+
 
                 # Create tables dynamically
-                for i in range(1, num_columns + 1):
-                    table_data = "```" + tabulate(self.df[i], headers=[], showindex=False, tablefmt='plain') + "```"
-                    table_data_list.append(str(re.sub(r"[),[('']", '', str(table_data))))
+                    for i in range(1, num_columns + 1):
+                        table_data = "```" + tabulate(self.df[i], headers=[], showindex=False, tablefmt='plain') + "```"
+                        table_data_list.append(str(re.sub(r"[),[('']", '', str(table_data))))
                     
              # Create fields dynamically
-                for i in range(1, num_columns + 1):
-                    self.embed.add_field(name=str(i), value=table_data_list[i - 1], inline=False)
+                    for i in range(1, num_columns + 1):
+                        self.embed.add_field(name=str(i), value=table_data_list[i - 1], inline=False)
 
-                self.embed.title = f"{self.league_name['name']} Matchups Week {self.week}"
-                self.embed.colour = 15548997
+                    self.embed.title = f"{self.league_name['name']} Matchups Week {self.week}"
+                    self.embed.colour = 15548997
 
-                await interaction.response.defer()
-                await interaction.followup.send(embed=self.embed)
+                    await interaction.response.defer()
+                    await interaction.followup.send(embed=self.embed)
 
 
 
