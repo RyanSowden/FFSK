@@ -41,7 +41,7 @@ class Matchups(commands.Cog):
                 # Get the number of columns dynamically
                 num_columns = len(self.df.columns)
                 if num_columns == 0:
-                    await interaction.response.send_message('No fields found in the table.')
+                    await interaction.response.send_message('No data found.')
 
                 else:
                     self.embed = discord.Embed()
